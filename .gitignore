@@ -8,3 +8,4 @@
 dist/*
 !dist/js*
 templates.js
+bower_components

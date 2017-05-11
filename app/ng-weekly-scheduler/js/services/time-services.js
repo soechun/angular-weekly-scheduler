@@ -28,6 +28,12 @@ angular.module('weeklyScheduler')
       addWeek: function (moment, nbWeek) {
         return moment.clone().add(nbWeek, WEEK);
       },
+      addDay: function (moment, nbDay) {
+        return moment.clone().add(nbDay, DAY);
+      },
+      dayPreciseDiff: function(start, end) {
+        return end.clone().diff(start.clone(), DAY, true);
+      },
       weekPreciseDiff: function (start, end) {
         return end.clone().diff(start.clone(), WEEK, true);
       },

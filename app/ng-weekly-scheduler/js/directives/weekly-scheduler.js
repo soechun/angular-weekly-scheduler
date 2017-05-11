@@ -23,14 +23,14 @@ angular.module('weeklyScheduler')
       }, now) : now).startOf('week');
 
       // Calculate max date of all scheduled events
-      var maxDate = (schedules ? schedules.reduce(function (maxDate, slot) {
-        return timeService.compare(slot.end, 'isAfter', maxDate);
-      }, now) : now).clone().add(1, 'year').endOf('week');
-
+      // var maxDate = (schedules ? schedules.reduce(function (maxDate, slot) {
+      //   return timeService.compare(slot.end, 'isAfter', maxDate);
+      // }, now) : now).clone().add(1, 'year').endOf('week');
+      var maxDate = minDate.clone().add(1, 'week').endOf('week');
       // Calculate nb of weeks covered by minDate => maxDate
       var nbWeeks = timeService.weekDiff(minDate, maxDate);
 
-      var result = angular.extend(options, {minDate: minDate, maxDate: maxDate, nbWeeks: nbWeeks});
+      var result = angular.extend(options, {minDate: minDate, maxDate: maxDate, nbWeeks: nbWeeks, nbDays: nbWeeks*7});
       // Log configuration
       $log.debug('Weekly Scheduler configuration:', result);
 
@@ -89,7 +89,7 @@ angular.module('weeklyScheduler')
             }, []), options);
 
             // Then resize schedule area knowing the number of weeks in scope
-            el.firstChild.style.width = schedulerCtrl.config.nbWeeks / 53 * 200 + '%';
+            el.firstChild.style.width = schedulerCtrl.config.nbDays / 53  * 4 * 200 + '%';
 
             // Finally, run the sub directives listeners
             schedulerCtrl.$modelChangeListeners.forEach(function (listener) {

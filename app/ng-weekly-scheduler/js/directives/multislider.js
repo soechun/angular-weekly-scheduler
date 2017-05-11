@@ -21,24 +21,24 @@ angular.module('weeklyScheduler')
         var conf = schedulerCtrl.config;
 
         // The default scheduler block size when adding a new item
-        var defaultNewScheduleSize = parseInt(attrs.size) || 8;
+        var defaultNewScheduleSize = parseInt(attrs.size) || 1;
 
         var valToPixel = function (val) {
-          var percent = val / (conf.nbWeeks);
-          return Math.floor(percent * element[0].clientWidth + 0.5);
+          var percent = val / (conf.nbDays);
+          return Math.floor(percent * element[0].clientWidth );
         };
 
         var pixelToVal = function (pixel) {
           var percent = pixel / element[0].clientWidth;
-          return Math.floor(percent * (conf.nbWeeks) + 0.5);
+          return Math.floor(percent * (conf.nbDays) );
         };
 
         var addSlot = function (start, end) {
           start = start >= 0 ? start : 0;
-          end = end <= conf.nbWeeks ? end : conf.nbWeeks;
+          end = end <= conf.nbDays ? end : conf.nbDays;
 
-          var startDate = timeService.addWeek(conf.minDate, start);
-          var endDate = timeService.addWeek(conf.minDate, end);
+          var startDate = timeService.addDay(conf.minDate, start);
+          var endDate = timeService.addDay(conf.minDate, end);
 
           scope.$apply(function () {
             var item = scope.item;
