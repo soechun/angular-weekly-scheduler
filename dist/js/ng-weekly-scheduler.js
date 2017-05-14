@@ -60,7 +60,7 @@ angular.module('weeklyScheduler')
       for (i = 0; i < tickcount; i++) {
         var child = gridItemEl.clone();
         if (angular.isUndefined(attrs.noText)) {
-          child.text(now.add(i && 1, 'day').format('Do'));
+          child.text(now.add(i && 1, 'day').format('Do MMM YY'));
         }
         element.append(child);
       }
@@ -764,7 +764,7 @@ angular.module('ng-weekly-scheduler/views/multi-slider.html', []).run(['$templat
 
 angular.module('ng-weekly-scheduler/views/weekly-scheduler.html', []).run(['$templateCache', function ($templateCache) {
   $templateCache.put('ng-weekly-scheduler/views/weekly-scheduler.html',
-    '<div class=labels><div class="srow text-right">{{schedulerCtrl.config.labels.month || \'Month\'}}</div><div class="srow text-right">{{schedulerCtrl.config.labels.dayNb || \'Date\'}}</div><div class=schedule-animate ng-repeat="item in schedulerCtrl.items" inject></div></div><div class=schedule-area-container><div class=schedule-area><div class="srow timestamps"><monthly-grid class=grid-container></monthly-grid></div><div class="srow timestamps"><daily-grid class=grid-container></daily-grid></div><div class="srow schedule-animate" ng-repeat="item in schedulerCtrl.items"><daily-grid class="grid-container striped" no-text></daily-grid><multi-slider index={{$index}}></multi-slider></div></div></div>');
+    '<div class=labels><div class="srow text-right">{{schedulerCtrl.config.labels.dayNb || \'Date\'}}</div><div class=schedule-animate ng-repeat="item in schedulerCtrl.items" inject></div></div><div class=schedule-area-container><div class=schedule-area><div class="srow timestamps"><daily-grid class=grid-container></daily-grid></div><div class="srow schedule-animate" ng-repeat="item in schedulerCtrl.items"><daily-grid class="grid-container striped" no-text></daily-grid><multi-slider index={{$index}}></multi-slider></div></div></div>');
 }]);
 
 angular.module('ng-weekly-scheduler/views/weekly-slot.html', []).run(['$templateCache', function ($templateCache) {

@@ -16,7 +16,7 @@ angular.module('weeklyScheduler')
       for (i = 0; i < tickcount; i++) {
         var child = gridItemEl.clone();
         if (angular.isUndefined(attrs.noText)) {
-          child.text(now.add(i && 1, 'day').format('Do'));
+          child.text(now.add(i && 1, 'day').format('Do MMM YY'));
         }
         element.append(child);
       }
