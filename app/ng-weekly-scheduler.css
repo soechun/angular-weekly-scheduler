@@ -35,7 +35,7 @@
 
 .scheduler .srow {
   position: relative;
-  height: 35px;
+  height: 70px;
   line-height: 35px;
 }
 
@@ -56,7 +56,7 @@
 multi-slider {
   position: relative;
   display: block;
-  height: 35px;
+  height: 70px;
   overflow: hidden;
 }
 
@@ -67,7 +67,7 @@ multi-slider .slot {
   border-radius: 3px;
   text-align: center;
   white-space: nowrap;
-  line-height: 25px;
+  line-height: 30px;
   color: #fff;
 }
 
@@ -136,8 +136,9 @@ multi-slider weekly-slot:not(.disable) .remove {
   display: none;
   cursor: pointer;
   float: right;
-  margin-right: -30px;
-  width: 25px;
+  margin-right: -20px;
+  width: 20px;
+  line-height: 20px;
   background: red;
   border-radius: 20%;
   opacity: 0.5;
@@ -176,7 +177,7 @@ multi-slider weekly-slot.active {
 
 .grid-container div {
   float: left;
-  height: 34px;
+  height: 68px;
   overflow: hidden;
   text-align: center;
 }

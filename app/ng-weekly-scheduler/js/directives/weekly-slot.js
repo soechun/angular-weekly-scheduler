@@ -21,30 +21,30 @@ angular.module('weeklyScheduler')
         var mergeOverlaps = function () {
           var schedule = scope.schedule;
           var schedules = scope.item.schedules;
-          schedules.forEach(function (el) {
-            if (el !== schedule) {
-              // model is inside another slot
-              if (el.end >= schedule.end && el.start <= schedule.start) {
-                schedules.splice(schedules.indexOf(el), 1);
-                schedule.end = el.end;
-                schedule.start = el.start;
-              }
-              // model completely covers another slot
-              else if (schedule.end >= el.end && schedule.start <= el.start) {
-                schedules.splice(schedules.indexOf(el), 1);
-              }
-              // another slot's end is inside current model
-              else if (el.end >= schedule.start && el.end <= schedule.end) {
-                schedules.splice(schedules.indexOf(el), 1);
-                schedule.start = el.start;
-              }
-              // another slot's start is inside current model
-              else if (el.start >= schedule.start && el.start <= schedule.end) {
-                schedules.splice(schedules.indexOf(el), 1);
-                schedule.end = el.end;
-              }
-            }
-          });
+          // schedules.forEach(function (el) {
+          //   if (el !== schedule) {
+          //     // model is inside another slot
+          //     if (el.end >= schedule.end && el.start <= schedule.start) {
+          //       schedules.splice(schedules.indexOf(el), 1);
+          //       schedule.end = el.end;
+          //       schedule.start = el.start;
+          //     }
+          //     // model completely covers another slot
+          //     else if (schedule.end >= el.end && schedule.start <= el.start) {
+          //       schedules.splice(schedules.indexOf(el), 1);
+          //     }
+          //     // another slot's end is inside current model
+          //     else if (el.end >= schedule.start && el.end <= schedule.end) {
+          //       schedules.splice(schedules.indexOf(el), 1);
+          //       schedule.start = el.start;
+          //     }
+          //     // another slot's start is inside current model
+          //     else if (el.start >= schedule.start && el.start <= schedule.end) {
+          //       schedules.splice(schedules.indexOf(el), 1);
+          //       schedule.end = el.end;
+          //     }
+          //   }
+          // });
         };
 
         /**
