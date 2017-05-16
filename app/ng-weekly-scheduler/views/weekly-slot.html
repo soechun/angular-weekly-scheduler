@@ -1,4 +1,4 @@
-<div title="{{schedule.start | date}} - {{schedule.end | date}}">
+<div title="{{schedule.start | date}} - {{schedule.end | date}}" ng-Style="myStyle">
   <div class="handle left" ondrag="resize" ondragstart="startResizeStart" ondragstop="endDrag" handle></div>
   <div ondrag="drag" ondragstart="startDrag" ondragstop="endDrag" handle>{{schedule.label}}</br>{{schedule.start | date}} - {{schedule.end | date}}
   </div>

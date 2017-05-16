@@ -22,6 +22,8 @@ angular.module('weeklyScheduler')
           var percent = pixel / containerEl[0].clientWidth;
           return Math.floor(percent * conf.nbDays + 0.5);
         };
+        scope.myStyle={};
+        scope.myStyle.background = scope.schedule.color ? scope.schedule.color : '#4eb8d5';
 
         var mergeOverlaps = function () {
           var schedule = scope.schedule;

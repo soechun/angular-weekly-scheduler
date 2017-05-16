@@ -464,6 +464,8 @@ angular.module('weeklyScheduler')
           var percent = pixel / containerEl[0].clientWidth;
           return Math.floor(percent * conf.nbDays + 0.5);
         };
+        scope.myStyle={};
+        scope.myStyle.background = scope.schedule.color ? scope.schedule.color : '#4eb8d5';
 
         var mergeOverlaps = function () {
           var schedule = scope.schedule;
@@ -794,6 +796,6 @@ angular.module('ng-weekly-scheduler/views/weekly-scheduler.html', []).run(['$tem
 
 angular.module('ng-weekly-scheduler/views/weekly-slot.html', []).run(['$templateCache', function ($templateCache) {
   $templateCache.put('ng-weekly-scheduler/views/weekly-slot.html',
-    '<div title="{{schedule.start | date}} - {{schedule.end | date}}"><div class="handle left" ondrag=resize ondragstart=startResizeStart ondragstop=endDrag handle></div><div ondrag=drag ondragstart=startDrag ondragstop=endDrag handle>{{schedule.label}}<br>{{schedule.start | date}} - {{schedule.end | date}}</div><div class="handle right" ondrag=resize ondragstart=startResizeEnd ondragstop=endDrag handle></div><div class=remove><span class="glyphicon glyphicon-remove"></span></div></div>');
+    '<div title="{{schedule.start | date}} - {{schedule.end | date}}" ng-style=myStyle><div class="handle left" ondrag=resize ondragstart=startResizeStart ondragstop=endDrag handle></div><div ondrag=drag ondragstart=startDrag ondragstop=endDrag handle>{{schedule.label}}<br>{{schedule.start | date}} - {{schedule.end | date}}</div><div class="handle right" ondrag=resize ondragstart=startResizeEnd ondragstop=endDrag handle></div><div class=remove><span class="glyphicon glyphicon-remove"></span></div></div>');
 }]);
 }( window ));
