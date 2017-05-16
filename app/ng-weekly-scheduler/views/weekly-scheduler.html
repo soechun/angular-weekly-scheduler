@@ -2,7 +2,7 @@
   <!--<div class="srow text-right">{{schedulerCtrl.config.labels.month || 'Month'}}</div> -->
   <!--<div class="srow text-right">{{schedulerCtrl.config.labels.weekNb || 'Week number'}}</div>-->
   <div class="srow text-right">{{schedulerCtrl.config.labels.dayNb || 'Date'}}</div>
-  <div class="schedule-animate" ng-repeat="item in schedulerCtrl.items" inject></div>
+  <div class="schedule-animate" ng-repeat="item in schedulerCtrl.items | filter: filters" inject></div>
 </div>
 
 <div class="schedule-area-container">
