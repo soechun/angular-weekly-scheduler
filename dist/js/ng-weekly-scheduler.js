@@ -230,6 +230,11 @@ angular.module('weeklyScheduler')
       restrict: 'E',
       require: '^weeklyScheduler',
       templateUrl: 'ng-weekly-scheduler/views/multi-slider.html',
+      scope: {
+        onAdd: '&',
+        onDelete: '&',
+        item: '='
+      },
       link: function (scope, element, attrs, schedulerCtrl) {
         var conf = schedulerCtrl.config;
 
@@ -252,15 +257,16 @@ angular.module('weeklyScheduler')
 
           var startDate = timeService.addDay(conf.minDate, start);
           var endDate = timeService.addDay(conf.minDate, end);
-
-          scope.$apply(function () {
-            var item = scope.item;
-            if (!item.schedules) {
-              item.schedules = [];
-            }
-            console.log('pushing', JSON.stringify(item.schedules));
-            item.schedules.push({start: startDate.toDate(), end: endDate.toDate()});
-          });
+          if(scope.onAdd && scope.onAdd({label: scope.item.label ,slot: {start: startDate, end: endDate}})){
+            scope.$apply(function () {
+              var item = scope.item;
+              if (!item.schedules) {
+                item.schedules = [];
+              }
+              console.log('pushing', JSON.stringify(item.schedules));
+              item.schedules.push({start: startDate.toDate(), end: endDate.toDate()});
+            });
+          }
         };
 
         var hoverElement = angular.element(element.find('div')[0]);
@@ -313,15 +319,16 @@ angular.module('weeklyScheduler')
       var now = moment();
 
       // Calculate min date of all scheduled events
-      var minDate = (schedules ? schedules.reduce(function (minDate, slot) {
-        return timeService.compare(slot.start, 'isBefore', minDate);
-      }, now) : now).startOf('week');
-
+      // var minDate = (schedules ? schedules.reduce(function (minDate, slot) {
+      //   return timeService.compare(slot.start, 'isBefore', minDate);
+      // }, now) : now).startOf('week');
+      var minDate = moment(options.minDate);
       // Calculate max date of all scheduled events
-      var maxDate = (schedules ? schedules.reduce(function (maxDate, slot) {
-        return timeService.compare(slot.end, 'isAfter', maxDate);
-      }, now) : now).clone().add(1, 'week').endOf('week');
+      // var maxDate = (schedules ? schedules.reduce(function (maxDate, slot) {
+      //   return timeService.compare(slot.end, 'isAfter', maxDate);
+      // }, now) : now).clone().add(1, 'week').endOf('week');
       // Calculate nb of weeks covered by minDate => maxDate
+      var maxDate = moment(options.maxDate);
       var nbWeeks = timeService.weekDiff(minDate, maxDate);
 
       var result = angular.extend(options, {minDate: minDate, maxDate: maxDate, nbWeeks: nbWeeks, nbDays: nbWeeks*7});
@@ -352,9 +359,13 @@ angular.module('weeklyScheduler')
       }],
       controllerAs: 'schedulerCtrl',
       link: function (scope, element, attrs, schedulerCtrl) {
+
         var optionsFn = $parse(attrs.options),
           options = angular.extend(defaultOptions, optionsFn(scope) || {});
-
+        var onAdd = $parse(attrs.onAdd)(scope);
+        scope.onAdd = onAdd;
+        var onDelete = $parse(attrs.onDelete)(scope);
+        scope.onDelete = onDelete;
         // Get the schedule container element
         var el = element[0].querySelector(defaultOptions.selector);
 
@@ -430,6 +441,11 @@ angular.module('weeklyScheduler')
       restrict: 'E',
       require: ['^weeklyScheduler', 'ngModel'],
       templateUrl: 'ng-weekly-scheduler/views/weekly-slot.html',
+      scope: {
+        onDelete: '&',
+        schedule: '=',
+        item: '='
+      },
       link: function (scope, element, attrs, ctrls) {
         var schedulerCtrl = ctrls[0], ngModelCtrl = ctrls[1];
         var conf = schedulerCtrl.config;
@@ -476,11 +492,14 @@ angular.module('weeklyScheduler')
          * Delete on right click on slot
          */
         var deleteSelf = function () {
-          containerEl.removeClass('dragging');
-          containerEl.removeClass('slot-hover');
-          scope.item.schedules.splice(scope.item.schedules.indexOf(scope.schedule), 1);
-          containerEl.find('weekly-slot').remove();
-          scope.$apply();
+          if(scope.onDelete && scope.onDelete({item: scope.item})) {
+              containerEl.removeClass('dragging');
+              containerEl.removeClass('slot-hover');
+              scope.item.schedules.splice(scope.item.schedules.indexOf(scope.schedule), 1);
+              containerEl.find('weekly-slot').remove();
+              scope.$apply();
+          }
+
         };
 
         element.find('span').on('click', function (e) {
@@ -759,12 +778,12 @@ angular.module('ngWeeklySchedulerTemplates', ['ng-weekly-scheduler/views/multi-s
 
 angular.module('ng-weekly-scheduler/views/multi-slider.html', []).run(['$templateCache', function ($templateCache) {
   $templateCache.put('ng-weekly-scheduler/views/multi-slider.html',
-    '<div class="slot ghost" ng-show="item.editable !== false && (!schedulerCtrl.config.monoSchedule || !item.schedules.length)">{{schedulerCtrl.config.labels.addNew || \'Add New\'}}</div><weekly-slot class=slot ng-class="{disable: item.editable === false}" ng-repeat="schedule in item.schedules" ng-model=schedule ng-model-options="{ updateOn: \'default blur\', debounce: { \'default\': 500, \'blur\': 0 } }"></weekly-slot>');
+    '<div class="slot ghost" ng-show="item.editable !== false && (!schedulerCtrl.config.monoSchedule || !item.schedules.length)">{{schedulerCtrl.config.labels.addNew || \'Add New\'}}</div><weekly-slot class=slot ng-class="{disable: item.editable === false}" ng-repeat="schedule in item.schedules" ng-model=schedule schedule=schedule item=item on-delete="onDelete(item, schedule)" ng-model-options="{ updateOn: \'default blur\', debounce: { \'default\': 500, \'blur\': 0 } }"></weekly-slot>');
 }]);
 
 angular.module('ng-weekly-scheduler/views/weekly-scheduler.html', []).run(['$templateCache', function ($templateCache) {
   $templateCache.put('ng-weekly-scheduler/views/weekly-scheduler.html',
-    '<div class=labels><div class="srow text-right">{{schedulerCtrl.config.labels.dayNb || \'Date\'}}</div><div class=schedule-animate ng-repeat="item in schedulerCtrl.items" inject></div></div><div class=schedule-area-container><div class=schedule-area><div class="srow timestamps"><daily-grid class=grid-container></daily-grid></div><div class="srow schedule-animate" ng-repeat="item in schedulerCtrl.items"><daily-grid class="grid-container striped" no-text></daily-grid><multi-slider index={{$index}}></multi-slider></div></div></div>');
+    '<div class=labels><div class="srow text-right">{{schedulerCtrl.config.labels.dayNb || \'Date\'}}</div><div class=schedule-animate ng-repeat="item in schedulerCtrl.items" inject></div></div><div class=schedule-area-container><div class=schedule-area><div class="srow timestamps"><daily-grid class=grid-container></daily-grid></div><div class="srow schedule-animate" ng-repeat="item in schedulerCtrl.items"><daily-grid class="grid-container striped" no-text></daily-grid><multi-slider index={{$index}} on-add=onAdd(label,slot) item=item on-delete="onDelete(item, schedule)"></multi-slider></div></div></div>');
 }]);
 
 angular.module('ng-weekly-scheduler/views/weekly-slot.html', []).run(['$templateCache', function ($templateCache) {

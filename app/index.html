@@ -64,7 +64,9 @@
     <weekly-scheduler class="scheduler"
                       items="model.items"
                       on-change="demo.doSomething"
-                      on-delete="demo.doSomething"
+                      on-slot-add="demo.doSomething"
+                      on-add="demo.onAdd"
+                      on-delete="demo.onDelete"
                       options="model.options">
       <div class="srow">{{::$index + 1}}. {{item.label}}</div>
     </weekly-scheduler>

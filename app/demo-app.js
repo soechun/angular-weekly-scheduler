@@ -28,6 +28,8 @@ angular
       $scope.model = {
         locale: localeService.$locale.id,
         options: {/*monoSchedule: true*/
+          minDate: moment('2017-5-20').toDate(),
+          maxDate: moment('2017-5-30').toDate()
         },
         items: [
           {
@@ -53,10 +55,18 @@ angular
       // moment('2017-09-12').toDate(), end: moment('2017-10-12').toDate()}  ]   }]);
       // }, 1000);
 
-      this.doSomething = function (itemIndex, scheduleIndex, scheduleValue) {
+      /*this.doSomething = function (itemIndex, scheduleIndex, scheduleValue) {
+        alert('do something');
         $log.debug('The model has changed!', itemIndex, scheduleIndex, scheduleValue);
-      };
-
+      };*/
+      this.onAdd = function(label,slot) {
+        console.log('final add', label,slot)
+        return true;
+      }
+      this.onDelete = function(item, schedule) {
+        console.log('final delete', item);
+        return true;
+      }
       this.onLocaleChange = function () {
         $log.debug('The locale is changing to', $scope.model.locale);
         localeService

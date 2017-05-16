@@ -5,6 +5,11 @@ angular.module('weeklyScheduler')
       restrict: 'E',
       require: ['^weeklyScheduler', 'ngModel'],
       templateUrl: 'ng-weekly-scheduler/views/weekly-slot.html',
+      scope: {
+        onDelete: '&',
+        schedule: '=',
+        item: '='
+      },
       link: function (scope, element, attrs, ctrls) {
         var schedulerCtrl = ctrls[0], ngModelCtrl = ctrls[1];
         var conf = schedulerCtrl.config;
@@ -51,11 +56,14 @@ angular.module('weeklyScheduler')
          * Delete on right click on slot
          */
         var deleteSelf = function () {
-          containerEl.removeClass('dragging');
-          containerEl.removeClass('slot-hover');
-          scope.item.schedules.splice(scope.item.schedules.indexOf(scope.schedule), 1);
-          containerEl.find('weekly-slot').remove();
-          scope.$apply();
+          if(scope.onDelete && scope.onDelete({item: scope.item})) {
+              containerEl.removeClass('dragging');
+              containerEl.removeClass('slot-hover');
+              scope.item.schedules.splice(scope.item.schedules.indexOf(scope.schedule), 1);
+              containerEl.find('weekly-slot').remove();
+              scope.$apply();
+          }
+
         };
 
         element.find('span').on('click', function (e) {

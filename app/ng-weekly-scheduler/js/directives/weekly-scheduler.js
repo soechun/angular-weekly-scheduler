@@ -18,15 +18,16 @@ angular.module('weeklyScheduler')
       var now = moment();
 
       // Calculate min date of all scheduled events
-      var minDate = (schedules ? schedules.reduce(function (minDate, slot) {
-        return timeService.compare(slot.start, 'isBefore', minDate);
-      }, now) : now).startOf('week');
-
+      // var minDate = (schedules ? schedules.reduce(function (minDate, slot) {
+      //   return timeService.compare(slot.start, 'isBefore', minDate);
+      // }, now) : now).startOf('week');
+      var minDate = moment(options.minDate);
       // Calculate max date of all scheduled events
-      var maxDate = (schedules ? schedules.reduce(function (maxDate, slot) {
-        return timeService.compare(slot.end, 'isAfter', maxDate);
-      }, now) : now).clone().add(1, 'week').endOf('week');
+      // var maxDate = (schedules ? schedules.reduce(function (maxDate, slot) {
+      //   return timeService.compare(slot.end, 'isAfter', maxDate);
+      // }, now) : now).clone().add(1, 'week').endOf('week');
       // Calculate nb of weeks covered by minDate => maxDate
+      var maxDate = moment(options.maxDate);
       var nbWeeks = timeService.weekDiff(minDate, maxDate);
 
       var result = angular.extend(options, {minDate: minDate, maxDate: maxDate, nbWeeks: nbWeeks, nbDays: nbWeeks*7});
@@ -57,9 +58,13 @@ angular.module('weeklyScheduler')
       }],
       controllerAs: 'schedulerCtrl',
       link: function (scope, element, attrs, schedulerCtrl) {
+
         var optionsFn = $parse(attrs.options),
           options = angular.extend(defaultOptions, optionsFn(scope) || {});
-
+        var onAdd = $parse(attrs.onAdd)(scope);
+        scope.onAdd = onAdd;
+        var onDelete = $parse(attrs.onDelete)(scope);
+        scope.onDelete = onDelete;
         // Get the schedule container element
         var el = element[0].querySelector(defaultOptions.selector);
 

@@ -17,6 +17,11 @@ angular.module('weeklyScheduler')
       restrict: 'E',
       require: '^weeklyScheduler',
       templateUrl: 'ng-weekly-scheduler/views/multi-slider.html',
+      scope: {
+        onAdd: '&',
+        onDelete: '&',
+        item: '='
+      },
       link: function (scope, element, attrs, schedulerCtrl) {
         var conf = schedulerCtrl.config;
 
@@ -39,15 +44,16 @@ angular.module('weeklyScheduler')
 
           var startDate = timeService.addDay(conf.minDate, start);
           var endDate = timeService.addDay(conf.minDate, end);
-
-          scope.$apply(function () {
-            var item = scope.item;
-            if (!item.schedules) {
-              item.schedules = [];
-            }
-            console.log('pushing', JSON.stringify(item.schedules));
-            item.schedules.push({start: startDate.toDate(), end: endDate.toDate()});
-          });
+          if(scope.onAdd && scope.onAdd({label: scope.item.label ,slot: {start: startDate, end: endDate}})){
+            scope.$apply(function () {
+              var item = scope.item;
+              if (!item.schedules) {
+                item.schedules = [];
+              }
+              console.log('pushing', JSON.stringify(item.schedules));
+              item.schedules.push({start: startDate.toDate(), end: endDate.toDate()});
+            });
+          }
         };
 
         var hoverElement = angular.element(element.find('div')[0]);

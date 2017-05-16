@@ -4,4 +4,7 @@
              ng-class="{disable: item.editable === false}"
              ng-repeat="schedule in item.schedules"
              ng-model="schedule"
+             schedule="schedule"
+             item = "item"
+             on-delete="onDelete(item, schedule)"
              ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 } }"></weekly-slot>
