@@ -61,10 +61,16 @@ angular.module('weeklyScheduler')
 
         var optionsFn = $parse(attrs.options),
           options = angular.extend(defaultOptions, optionsFn(scope) || {});
+        
         var onAdd = $parse(attrs.onAdd)(scope);
         scope.onAdd = onAdd;
+        
         var onDelete = $parse(attrs.onDelete)(scope);
         scope.onDelete = onDelete;
+        
+        var filters = $parse(attrs.filters)(scope);
+        scope.filters = filters;
+
         // Get the schedule container element
         var el = element[0].querySelector(defaultOptions.selector);
 

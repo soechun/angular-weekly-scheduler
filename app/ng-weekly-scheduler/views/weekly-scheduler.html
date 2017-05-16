@@ -18,7 +18,7 @@
     <div class="srow timestamps">
       <daily-grid class="grid-container"></daily-grid>
     </div>
-    <div class="srow schedule-animate" ng-repeat="item in schedulerCtrl.items">
+    <div class="srow schedule-animate" ng-repeat="item in schedulerCtrl.items | filter : filters">
       <daily-grid class="grid-container striped" no-text></daily-grid>
       <multi-slider index="{{$index}}" on-add="onAdd(label,slot)" item="item" on-delete="onDelete(item, schedule)"></multi-slider>
     </div>

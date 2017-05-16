@@ -362,10 +362,16 @@ angular.module('weeklyScheduler')
 
         var optionsFn = $parse(attrs.options),
           options = angular.extend(defaultOptions, optionsFn(scope) || {});
+        
         var onAdd = $parse(attrs.onAdd)(scope);
         scope.onAdd = onAdd;
+        
         var onDelete = $parse(attrs.onDelete)(scope);
         scope.onDelete = onDelete;
+        
+        var filters = $parse(attrs.filters)(scope);
+        scope.filters = filters;
+
         // Get the schedule container element
         var el = element[0].querySelector(defaultOptions.selector);
 
@@ -783,7 +789,7 @@ angular.module('ng-weekly-scheduler/views/multi-slider.html', []).run(['$templat
 
 angular.module('ng-weekly-scheduler/views/weekly-scheduler.html', []).run(['$templateCache', function ($templateCache) {
   $templateCache.put('ng-weekly-scheduler/views/weekly-scheduler.html',
-    '<div class=labels><div class="srow text-right">{{schedulerCtrl.config.labels.dayNb || \'Date\'}}</div><div class=schedule-animate ng-repeat="item in schedulerCtrl.items" inject></div></div><div class=schedule-area-container><div class=schedule-area><div class="srow timestamps"><daily-grid class=grid-container></daily-grid></div><div class="srow schedule-animate" ng-repeat="item in schedulerCtrl.items"><daily-grid class="grid-container striped" no-text></daily-grid><multi-slider index={{$index}} on-add=onAdd(label,slot) item=item on-delete="onDelete(item, schedule)"></multi-slider></div></div></div>');
+    '<div class=labels><div class="srow text-right">{{schedulerCtrl.config.labels.dayNb || \'Date\'}}</div><div class=schedule-animate ng-repeat="item in schedulerCtrl.items" inject></div></div><div class=schedule-area-container><div class=schedule-area><div class="srow timestamps"><daily-grid class=grid-container></daily-grid></div><div class="srow schedule-animate" ng-repeat="item in schedulerCtrl.items | filter : filters"><daily-grid class="grid-container striped" no-text></daily-grid><multi-slider index={{$index}} on-add=onAdd(label,slot) item=item on-delete="onDelete(item, schedule)"></multi-slider></div></div></div>');
 }]);
 
 angular.module('ng-weekly-scheduler/views/weekly-slot.html', []).run(['$templateCache', function ($templateCache) {
