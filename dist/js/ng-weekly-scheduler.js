@@ -392,6 +392,9 @@ angular.module('weeklyScheduler')
             // Keep track of our model (use it in template)
             schedulerCtrl.items = items;
 
+            var optionsFn = $parse(attrs.options),
+            options = angular.extend(defaultOptions, optionsFn(scope) || {});
+            
             schedulerCtrl.config = config(options);
             // First calculate configuration
             // schedulerCtrl.config = config(items.reduce(function (result, item) {
