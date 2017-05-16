@@ -315,7 +315,7 @@ angular.module('weeklyScheduler')
      * @param options
      * @returns {{minDate: *, maxDate: *, nbWeeks: *}}
      */
-    function config(schedules, options) {
+    function config(options) {
       var now = moment();
 
       // Calculate min date of all scheduled events
@@ -375,6 +375,11 @@ angular.module('weeklyScheduler')
         // Get the schedule container element
         var el = element[0].querySelector(defaultOptions.selector);
 
+        function onOptionChange(options) {
+          var optionsFn = $parse(attrs.options),
+          options = angular.extend(defaultOptions, optionsFn(scope) || {});
+          schedulerCtrl.config = config(options);
+        }
         function onModelChange(items) {
           // Check items are present
           if (items) {
@@ -387,17 +392,19 @@ angular.module('weeklyScheduler')
             // Keep track of our model (use it in template)
             schedulerCtrl.items = items;
 
+            schedulerCtrl.config = config(options);
             // First calculate configuration
-            schedulerCtrl.config = config(items.reduce(function (result, item) {
-              var schedules = item.schedules;
+            // schedulerCtrl.config = config(items.reduce(function (result, item) {
+            //   var schedules = item.schedules;
 
-              return result.concat(schedules && schedules.length ?
-                // If in multiSlider mode, ensure a schedule array is present on each item
-                // Else only use first element of schedule array
-                (options.monoSchedule ? item.schedules = [schedules[0]] : schedules) :
-                item.schedules = []
-              );
-            }, []), options);
+            //   return result.concat(schedules && schedules.length ?
+            //     // If in multiSlider mode, ensure a schedule array is present on each item
+            //     // Else only use first element of schedule array
+            //     (options.monoSchedule ? item.schedules = [schedules[0]] : schedules) :
+            //     item.schedules = []
+            //   );
+            // }, []), 
+            // options);
 
             // Then resize schedule area knowing the number of weeks in scope
             el.firstChild.style.width = schedulerCtrl.config.nbDays / 53  * 4 * 200 + '%';
@@ -426,6 +433,8 @@ angular.module('weeklyScheduler')
            * Watch the model items
            */
           scope.$watchCollection(attrs.items, onModelChange);
+
+          scope.$watchCollection(attrs.options, onOptionChange);
 
           /**
            * Listen to $locale change (brought by external module weeklySchedulerI18N)
