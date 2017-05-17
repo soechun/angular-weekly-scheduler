@@ -394,8 +394,9 @@ angular.module('weeklyScheduler')
 
             var optionsFn = $parse(attrs.options),
             options = angular.extend(defaultOptions, optionsFn(scope) || {});
-            
+
             schedulerCtrl.config = config(options);
+            console.log(schedulerCtrl.config);
             // First calculate configuration
             // schedulerCtrl.config = config(items.reduce(function (result, item) {
             //   var schedules = item.schedules;
@@ -522,11 +523,12 @@ angular.module('weeklyScheduler')
 
         };
 
-        element.find('span').on('click', function (e) {
-          e.preventDefault();
-          deleteSelf();
-        });
-
+        if(scope.schedule.editable) {
+          element.find('span').on('click', function (e) {
+            e.preventDefault();
+            deleteSelf();
+          });
+        }
         element.on('mouseover', function () {
           containerEl.addClass('slot-hover');
         });
@@ -536,7 +538,7 @@ angular.module('weeklyScheduler')
         });
 
 
-        if (scope.item.editable !== false) {
+        if (scope.schedule.editable !== false) {
           scope.startResizeStart = function () {
             resizeDirectionIsStart = true;
             scope.startDrag();
@@ -798,7 +800,7 @@ angular.module('ngWeeklySchedulerTemplates', ['ng-weekly-scheduler/views/multi-s
 
 angular.module('ng-weekly-scheduler/views/multi-slider.html', []).run(['$templateCache', function ($templateCache) {
   $templateCache.put('ng-weekly-scheduler/views/multi-slider.html',
-    '<div class="slot ghost" ng-show="item.editable !== false && (!schedulerCtrl.config.monoSchedule || !item.schedules.length)">{{schedulerCtrl.config.labels.addNew || \'Add New\'}}</div><weekly-slot class=slot ng-class="{disable: item.editable === false}" ng-repeat="schedule in item.schedules" ng-model=schedule schedule=schedule item=item on-delete="onDelete(item, schedule)" ng-model-options="{ updateOn: \'default blur\', debounce: { \'default\': 500, \'blur\': 0 } }"></weekly-slot>');
+    '<div class="slot ghost" ng-show="item.editable !== false && (!schedulerCtrl.config.monoSchedule || !item.schedules.length)">{{schedulerCtrl.config.labels.addNew || \'Add New\'}}</div><weekly-slot class=slot ng-repeat="schedule in item.schedules" ng-model=schedule schedule=schedule item=item on-delete="onDelete(item, schedule)" ng-model-options="{ updateOn: \'default blur\', debounce: { \'default\': 500, \'blur\': 0 } }"></weekly-slot>');
 }]);
 
 angular.module('ng-weekly-scheduler/views/weekly-scheduler.html', []).run(['$templateCache', function ($templateCache) {

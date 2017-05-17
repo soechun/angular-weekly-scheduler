@@ -38,6 +38,7 @@ angular
             schedules: [
               {
                 label: 'Event 1',
+                editable: false,
                 color: '#ffddee',
                 start: moment('2017-5-20').toDate(),
                 end: moment('2017-5-30').toDate()

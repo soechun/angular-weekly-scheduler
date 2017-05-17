@@ -68,11 +68,12 @@ angular.module('weeklyScheduler')
 
         };
 
-        element.find('span').on('click', function (e) {
-          e.preventDefault();
-          deleteSelf();
-        });
-
+        if(scope.schedule.editable) {
+          element.find('span').on('click', function (e) {
+            e.preventDefault();
+            deleteSelf();
+          });
+        }
         element.on('mouseover', function () {
           containerEl.addClass('slot-hover');
         });
@@ -82,7 +83,7 @@ angular.module('weeklyScheduler')
         });
 
 
-        if (scope.item.editable !== false) {
+        if (scope.schedule.editable !== false) {
           scope.startResizeStart = function () {
             resizeDirectionIsStart = true;
             scope.startDrag();
