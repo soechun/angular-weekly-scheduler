@@ -68,7 +68,7 @@ angular.module('weeklyScheduler')
 
         };
 
-        if(scope.schedule.editable) {
+        if(scope.schedule.editable != false) {
           element.find('span').on('click', function (e) {
             e.preventDefault();
             deleteSelf();
