@@ -20,6 +20,7 @@ angular.module('weeklyScheduler')
       scope: {
         onAdd: '&',
         onDelete: '&',
+        onClick: '&',
         item: '='
       },
       link: function (scope, element, attrs, schedulerCtrl) {
@@ -37,7 +38,9 @@ angular.module('weeklyScheduler')
           var percent = pixel / element[0].clientWidth;
           return Math.floor(percent * (conf.nbDays) );
         };
-
+        scope.clicked = function(item, schedule) {
+          scope.onClick({item: item, schedule: schedule});
+        }
         var addSlot = function (start, end) {
           start = start >= 0 ? start : 0;
           end = end <= conf.nbDays ? end : conf.nbDays;

@@ -69,6 +69,9 @@ angular
         console.log('final delete', item);
         return true;
       }
+      this.onClick = function(item, schedule) {
+        console.log('clicked here');
+      }
       this.onLocaleChange = function () {
         $log.debug('The locale is changing to', $scope.model.locale);
         localeService

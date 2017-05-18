@@ -233,6 +233,7 @@ angular.module('weeklyScheduler')
       scope: {
         onAdd: '&',
         onDelete: '&',
+        onClick: '&',
         item: '='
       },
       link: function (scope, element, attrs, schedulerCtrl) {
@@ -250,7 +251,9 @@ angular.module('weeklyScheduler')
           var percent = pixel / element[0].clientWidth;
           return Math.floor(percent * (conf.nbDays) );
         };
-
+        scope.clicked = function(item, schedule) {
+          scope.onClick({item: item, schedule: schedule});
+        }
         var addSlot = function (start, end) {
           start = start >= 0 ? start : 0;
           end = end <= conf.nbDays ? end : conf.nbDays;
@@ -369,6 +372,9 @@ angular.module('weeklyScheduler')
         var onDelete = $parse(attrs.onDelete)(scope);
         scope.onDelete = onDelete;
         
+        var onClick = $parse(attrs.onClick)(scope);
+        scope.onClick = onClick;
+        
         var filters = $parse(attrs.filters)(scope);
         scope.filters = filters;
 
@@ -463,7 +469,8 @@ angular.module('weeklyScheduler')
       scope: {
         onDelete: '&',
         schedule: '=',
-        item: '='
+        item: '=',
+        onClick: '&',
       },
       link: function (scope, element, attrs, ctrls) {
         var schedulerCtrl = ctrls[0], ngModelCtrl = ctrls[1];
@@ -480,6 +487,9 @@ angular.module('weeklyScheduler')
         scope.myStyle={};
         scope.myStyle.background = scope.schedule.color ? scope.schedule.color : '#4eb8d5';
 
+        scope.clicked= function() {
+          scope.onClick({item: scope.item, schedule: scope.schedule});
+        };
         var mergeOverlaps = function () {
           var schedule = scope.schedule;
           var schedules = scope.item.schedules;
@@ -513,7 +523,7 @@ angular.module('weeklyScheduler')
          * Delete on right click on slot
          */
         var deleteSelf = function () {
-          if(scope.onDelete && scope.onDelete({item: scope.item})) {
+          if(scope.onDelete && scope.onDelete({item: scope.item, schedule: scope.schedule})) {
               containerEl.removeClass('dragging');
               containerEl.removeClass('slot-hover');
               scope.item.schedules.splice(scope.item.schedules.indexOf(scope.schedule), 1);
@@ -800,16 +810,16 @@ angular.module('ngWeeklySchedulerTemplates', ['ng-weekly-scheduler/views/multi-s
 
 angular.module('ng-weekly-scheduler/views/multi-slider.html', []).run(['$templateCache', function ($templateCache) {
   $templateCache.put('ng-weekly-scheduler/views/multi-slider.html',
-    '<div class="slot ghost" ng-show="item.editable !== false && (!schedulerCtrl.config.monoSchedule || !item.schedules.length)">{{schedulerCtrl.config.labels.addNew || \'Add New\'}}</div><weekly-slot class=slot ng-repeat="schedule in item.schedules" ng-model=schedule schedule=schedule item=item on-delete="onDelete(item, schedule)" ng-model-options="{ updateOn: \'default blur\', debounce: { \'default\': 500, \'blur\': 0 } }"></weekly-slot>');
+    '<div class="slot ghost" ng-show="item.editable !== false && (!schedulerCtrl.config.monoSchedule || !item.schedules.length)">{{schedulerCtrl.config.labels.addNew || \'Add New\'}}</div><weekly-slot class=slot ng-repeat="schedule in item.schedules" ng-model=schedule schedule=schedule item=item on-delete="onDelete(item, schedule)" on-click="clicked(item, schedule)" ng-model-options="{ updateOn: \'default blur\', debounce: { \'default\': 500, \'blur\': 0 } }"></weekly-slot>');
 }]);
 
 angular.module('ng-weekly-scheduler/views/weekly-scheduler.html', []).run(['$templateCache', function ($templateCache) {
   $templateCache.put('ng-weekly-scheduler/views/weekly-scheduler.html',
-    '<div class=labels><div class="srow text-right">{{schedulerCtrl.config.labels.dayNb || \'Date\'}}</div><div class=schedule-animate ng-repeat="item in schedulerCtrl.items | filter: filters" inject></div></div><div class=schedule-area-container><div class=schedule-area><div class="srow timestamps"><daily-grid class=grid-container></daily-grid></div><div class="srow schedule-animate" ng-repeat="item in schedulerCtrl.items | filter : filters"><daily-grid class="grid-container striped" no-text></daily-grid><multi-slider index={{$index}} on-add=onAdd(label,slot) item=item on-delete="onDelete(item, schedule)"></multi-slider></div></div></div>');
+    '<div class=labels><div class="srow text-right">{{schedulerCtrl.config.labels.dayNb || \'Date\'}}</div><div class=schedule-animate ng-repeat="item in schedulerCtrl.items | filter: filters" inject></div></div><div class=schedule-area-container><div class=schedule-area><div class="srow timestamps"><daily-grid class=grid-container></daily-grid></div><div class="srow schedule-animate" ng-repeat="item in schedulerCtrl.items | filter : filters"><daily-grid class="grid-container striped" no-text></daily-grid><multi-slider index={{$index}} on-add=onAdd(label,slot) item=item on-delete="onDelete(item, schedule)" on-click="onClick(item, schedule)"></multi-slider></div></div></div>');
 }]);
 
 angular.module('ng-weekly-scheduler/views/weekly-slot.html', []).run(['$templateCache', function ($templateCache) {
   $templateCache.put('ng-weekly-scheduler/views/weekly-slot.html',
-    '<div title="{{schedule.start}} - {{schedule.end}}" ng-style=myStyle><div class="handle left" ondrag=resize ondragstart=startResizeStart ondragstop=endDrag handle></div><div ondrag=drag ondragstart=startDrag ondragstop=endDrag handle>{{schedule.label}}<br>{{schedule.start | date:"dd MMM"}} - {{schedule.end | date:"dd MMM"}}</div><div class="handle right" ondrag=resize ondragstart=startResizeEnd ondragstop=endDrag handle></div><div class=remove><span class="glyphicon glyphicon-remove"></span></div></div>');
+    '<div title="{{schedule.start}} - {{schedule.end}}" ng-style=myStyle ng-click=clicked()><div class="handle left" ondrag=resize ondragstart=startResizeStart ondragstop=endDrag handle></div><div ondrag=drag ondragstart=startDrag ondragstop=endDrag handle>{{schedule.label}}<br>{{schedule.start | date:"dd MMM"}} - {{schedule.end | date:"dd MMM"}}</div><div class="handle right" ondrag=resize ondragstart=startResizeEnd ondragstop=endDrag handle></div></div><div class=remove><span class="glyphicon glyphicon-remove"></span></div>');
 }]);
 }( window ));

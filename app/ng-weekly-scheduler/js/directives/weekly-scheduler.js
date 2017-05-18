@@ -68,6 +68,9 @@ angular.module('weeklyScheduler')
         var onDelete = $parse(attrs.onDelete)(scope);
         scope.onDelete = onDelete;
         
+        var onClick = $parse(attrs.onClick)(scope);
+        scope.onClick = onClick;
+        
         var filters = $parse(attrs.filters)(scope);
         scope.filters = filters;
 

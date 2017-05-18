@@ -8,7 +8,8 @@ angular.module('weeklyScheduler')
       scope: {
         onDelete: '&',
         schedule: '=',
-        item: '='
+        item: '=',
+        onClick: '&',
       },
       link: function (scope, element, attrs, ctrls) {
         var schedulerCtrl = ctrls[0], ngModelCtrl = ctrls[1];
@@ -25,6 +26,9 @@ angular.module('weeklyScheduler')
         scope.myStyle={};
         scope.myStyle.background = scope.schedule.color ? scope.schedule.color : '#4eb8d5';
 
+        scope.clicked= function() {
+          scope.onClick({item: scope.item, schedule: scope.schedule});
+        };
         var mergeOverlaps = function () {
           var schedule = scope.schedule;
           var schedules = scope.item.schedules;
@@ -58,7 +62,7 @@ angular.module('weeklyScheduler')
          * Delete on right click on slot
          */
         var deleteSelf = function () {
-          if(scope.onDelete && scope.onDelete({item: scope.item})) {
+          if(scope.onDelete && scope.onDelete({item: scope.item, schedule: scope.schedule})) {
               containerEl.removeClass('dragging');
               containerEl.removeClass('slot-hover');
               scope.item.schedules.splice(scope.item.schedules.indexOf(scope.schedule), 1);
