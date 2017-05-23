@@ -416,7 +416,7 @@ angular.module('weeklyScheduler')
             // options);
 
             // Then resize schedule area knowing the number of weeks in scope
-            el.firstChild.style.width = schedulerCtrl.config.nbDays / 53  * 4 * 200 + '%';
+            el.firstChild.style.width = schedulerCtrl.config.nbDays / 53  * 7 * 200 + '%';
 
             // Finally, run the sub directives listeners
             schedulerCtrl.$modelChangeListeners.forEach(function (listener) {
