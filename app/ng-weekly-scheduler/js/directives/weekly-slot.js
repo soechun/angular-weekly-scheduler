@@ -125,7 +125,6 @@ angular.module('weeklyScheduler')
           scope.resize = function (d) {
             var ui = ngModelCtrl.$viewValue;
             var delta = pixelToVal(d);
-            console.log(delta);
             if (resizeDirectionIsStart) {
               var newStart = Math.round(valuesOnDragStart.start + delta);
 
@@ -185,7 +184,6 @@ angular.module('weeklyScheduler')
             start: timeService.dayPreciseDiff(conf.minDate, moment(model.start), true),
             end: timeService.dayPreciseDiff(conf.minDate, moment(model.end), true)
           };
-          console.log(ui);
           //$log.debug('FORMATTER :', index, scope.$index, ui);
           return ui;
         });

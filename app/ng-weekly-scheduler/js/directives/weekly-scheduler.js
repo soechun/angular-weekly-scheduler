@@ -98,7 +98,6 @@ angular.module('weeklyScheduler')
             options = angular.extend(defaultOptions, optionsFn(scope) || {});
 
             schedulerCtrl.config = config(options);
-            console.log(schedulerCtrl.config);
             // First calculate configuration
             // schedulerCtrl.config = config(items.reduce(function (result, item) {
             //   var schedules = item.schedules;
