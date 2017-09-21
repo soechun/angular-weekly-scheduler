@@ -28,8 +28,8 @@ angular
       $scope.model = {
         locale: localeService.$locale.id,
         options: {/*monoSchedule: true*/
-          minDate: moment('2017-5-20').toDate(),
-          maxDate: moment('2017-5-30').toDate()
+          minDate: moment('2017-9-20').toDate(),
+          maxDate: moment('2017-9-30').toDate()
         },
         items: [
           {
@@ -40,8 +40,8 @@ angular
                 label: 'Event 1',
                 editable: false,
                 color: '#ffddee',
-                start: moment('2017-5-20').toDate(),
-                end: moment('2017-5-30').toDate()
+                start: moment('2017-9-20').toDate(),
+                end: moment('2017-9-30').toDate()
               }
             ]
           }

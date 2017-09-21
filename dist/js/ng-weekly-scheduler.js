@@ -61,6 +61,8 @@ angular.module('weeklyScheduler')
         var child = gridItemEl.clone();
         if (angular.isUndefined(attrs.noText)) {
           child.text(now.add(i && 1, 'day').format('Do MMM YY'));
+          if(moment().isSame(now,"day"))
+          child.addClass("today");
         }
         element.append(child);
       }
@@ -416,7 +418,7 @@ angular.module('weeklyScheduler')
             // options);
 
             // Then resize schedule area knowing the number of weeks in scope
-            el.firstChild.style.width = schedulerCtrl.config.nbDays / 53  * 7 * 200 + '%';
+            el.firstChild.style.width = schedulerCtrl.config.nbDays / 53  * 7 * 100 + '%';
 
             // Finally, run the sub directives listeners
             schedulerCtrl.$modelChangeListeners.forEach(function (listener) {

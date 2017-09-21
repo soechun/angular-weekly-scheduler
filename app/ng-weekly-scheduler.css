@@ -43,7 +43,10 @@
   color: #aaa;
   position: relative;
 }
-
+.today {
+  
+  color: #1D20CE;
+}
 .scheduler .timestamps .grid-container div {
   border-right: 1px solid #eee;
 }

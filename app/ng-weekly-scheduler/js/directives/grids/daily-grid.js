@@ -17,6 +17,8 @@ angular.module('weeklyScheduler')
         var child = gridItemEl.clone();
         if (angular.isUndefined(attrs.noText)) {
           child.text(now.add(i && 1, 'day').format('Do MMM YY'));
+          if(moment().isSame(now,"day"))
+          child.addClass("today");
         }
         element.append(child);
       }
